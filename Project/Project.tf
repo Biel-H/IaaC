@@ -7,7 +7,7 @@ resource "aws_vpc" "PRD-ECS"{
 }
 
 resource "aws_subnet" "terranet-pub-1"{
-    vpc_id      = aws_vpc.main.id
+    vpc_id      = aws_vpc.PRD-ECS.id
     cidr_block  ="10.0.1.0/24"
     map_public_ip_on_launch = "true"
     availability_zone   = "us-east-2a"
@@ -18,7 +18,7 @@ resource "aws_subnet" "terranet-pub-1"{
 }
 
 resource "aws_subnet" "terranet-pub-2"{
-    vpc_id      = aws_vpc.main.id
+    vpc_id      = aws_vpc.PRD-ECS.id
     cidr_block  ="10.0.2.0/24"
     map_public_ip_on_launch = "true"
     availability_zone   = "us-east-2b"
@@ -29,7 +29,7 @@ resource "aws_subnet" "terranet-pub-2"{
 }
 
 resource "aws_subnet" "terranet-pub-3"{
-    vpc_id      = aws_vpc.main.id
+    vpc_id      = aws_vpc.PRD-ECS.id
     cidr_block  ="10.0.3.0/24"
     map_public_ip_on_launch = "true"
     availability_zone   = "us-east-2c"
@@ -40,7 +40,7 @@ resource "aws_subnet" "terranet-pub-3"{
 }
 
 resource "aws_subnet" "terranet-priv-1"{
-    vpc_id      = aws_vpc.main.id
+    vpc_id      = aws_vpc.PRD-ECS.id
     cidr_block  ="10.0.4.0/24"
     map_public_ip_on_launch = "false"
     availability_zone   = "us-east-2a"
@@ -51,7 +51,7 @@ resource "aws_subnet" "terranet-priv-1"{
 }
 
 resource "aws_subnet" "terranet-priv-2"{
-    vpc_id      = aws_vpc.main.id
+    vpc_id      = aws_vpc.PRD-ECS.id
     cidr_block  ="10.0.5.0/24"
     map_public_ip_on_launch = "false"
     availability_zone   = "us-east-2b"
@@ -63,7 +63,7 @@ resource "aws_subnet" "terranet-priv-2"{
 
 
 resource "aws_internet_gateway" "main"{
-    vpc_id  = aws_vpc.main.id
+    vpc_id  = aws_vpc.PRD-ECS.id
 
     tags = {
         Name = "GW-terraform"
@@ -75,11 +75,11 @@ resource "aws_eip"  "terraeip" {
     vpc     = true
 
     tags = {
-        Name = "EIP-terraform"
+        Name = "terraeip"
     }
 }
 
-resource "aws_nat_gateway"  "terranat"{
+resource "aws_nat_gateway"  "terranat1" {
     allocation_id   = aws_eip.terraeip.id
     subnet_id   = aws_subnet.terranet-priv-1.id
     depends_on  = [aws_internet_gateway.main]
@@ -89,8 +89,34 @@ resource "aws_nat_gateway"  "terranat"{
     }
 }
 
+resource "aws_eip"  "terraeip2" {
+    vpc     = true
+
+    tags = {
+        Name = "terraeip2"
+    }
+}
+
+resource "aws_eip"  "terraeipublic1" {
+    vpc = true
+
+    tags = {
+        Name = "terraeipublic1"
+    }
+}
+
+resource "aws_nat_gateway"  "terranat2" {
+    allocation_id   = aws_eip.terraeip2.id
+    subnet_id   = aws_subnet.terranet-priv-2.id
+    depends_on  = [aws_internet_gateway.main]
+
+    tags = {
+        Name = "terranat2"
+    }
+}
+
 resource "aws_route_table"  "main"{
-    vpc_id  = aws_vpc.main.id
+    vpc_id  = aws_vpc.PRD-ECS.id
 
     route {
         //associate subnet can reach everywhere
@@ -104,20 +130,33 @@ resource "aws_route_table"  "main"{
         Name = "terraroute-pub"
     }
 }
-resource "aws_route_table"  "private" {
-    vpc_id  = aws_vpc.main.id
+resource "aws_route_table"  "private1" {
+    vpc_id  = aws_vpc.PRD-ECS.id
 
     route {
         cidr_block = "0.0.0.0/0"
-        nat_gateway_id  = aws_nat_gateway.terranat.id
+        nat_gateway_id  = aws_nat_gateway.terranat1.id
     }
 
     tags = {
-        Name = "terraroute-priv"
+        Name = "terraroute-priv-1"
     }
 }
 
-resource "aws_route_table_association"  "terranet-crta-pub-1"{
+resource "aws_route_table"  "private2" {
+    vpc_id  = aws_vpc.PRD-ECS.id
+
+    route {
+        cidr_block = "0.0.0.0/0"
+        nat_gateway_id  = aws_nat_gateway.terranat2.id
+    }
+
+    tags = {
+        Name = "terraroute-priv-2"
+    }
+}
+
+resource "aws_route_table_association"  "terranet-crta-pub-1" {
     subnet_id   = aws_subnet.terranet-pub-1.id
     route_table_id  = aws_route_table.main.id
 }
@@ -134,16 +173,16 @@ resource "aws_route_table_association"  "terranet-crta-pub-3"{
 
 resource "aws_route_table_association"  "terranet-ctra-priv-1"{
     subnet_id   = aws_subnet.terranet-priv-1.id
-    route_table_id  = aws_route_table.private.id
+    route_table_id  = aws_route_table.private1.id
 }
 
 resource "aws_route_table_association"  "terranet-ctra-priv-2"{
     subnet_id   = aws_subnet.terranet-priv-2.id
-    route_table_id  = aws_route_table.private.id
+    route_table_id  = aws_route_table.private2.id
 }
 
 resource "aws_network_acl"  "main"{
-    vpc_id  = aws_vpc.main.id
+    vpc_id  = aws_vpc.PRD-ECS.id
 
     egress {
         protocol    = "tcp"
