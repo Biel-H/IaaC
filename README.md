@@ -1,6 +1,6 @@
-	 ##Terraform documentation
+## Terraform documentation
 
-###Let's start with the principals commands:
+### Let's start with the principals commands:
 
  Find the terraform version: 
 ```terraform version ```
@@ -20,7 +20,7 @@ Apply changes:
 Destroy the managed infraestructure:
 ```terraform destroy```
 
-###Now let's expand this commans upon
+### Now let's expand this commans upon
 
 Plan, Deploy and Cleanup Commands
 
