@@ -1,0 +1,4 @@
+resource "aws_key_pair" "" {
+  key_name   = "sus-key"
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDId9Sc66ZjkbPUQimS9ZuyeoN5mQy20j3z7OAuywB1TylQVoDqx/JuSIeYBoQSCxr4lbCDuD3eSs5NuCWwy4sUIk0BZKaHJQMxtbpgrqcDUMnjv7R5OgfaXZra2M65zXVE+ZQYebLgWvuZ94W3nPM8xI80In/+0DYlf+kgrycMEKc2C7GUYp+sjy86TJKEWLQY9S8H6YqOhXW1N67H3D6F7pAiYs+a68M82Rc1SgH1IV6UdTXuf/LrX8rKXyD0YtTlP3uASSb7sqTvrxWm+LkbT0sRi5lrx8k36VM/dy/T67FBkBzhBpNqgnvmUDx5LRmKr0nt/ZrUOAhb4DvC5lOHnhW/D5DWYUEQZgZBwghhb6QnSMcO5wKBXMJX0AAEfEpMgWTTFrjagNgafcfAvdLVkIjKEiwFgmCt6Mt6tC6ogJU4rRwVXVQzUujtWRDHl2X7KBtn9eFijA+V3+ggVcISINBs283bxe8qoP2rdZfjqGBfMFgHhyrmGTQRO26Qqw0= root@luffy"
+}
