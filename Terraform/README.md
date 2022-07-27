@@ -1,46 +1,51 @@
-	// Terraform documentation //
- //Let's start with the principals commands:
+## Terraform documentation
 
- //Find the terraform version: 
-terraform version
+### Let's start with the principals commands:
 
-// Switch the working directory:
-terraform -chdir=<path_to/tf> <subcommand>
+ Find the terraform version: 
+```terraform version ```
 
-// Initalize the directory:
-terraform init
+Switch the working directory:
+``` terraform -chdir=<path_to/tf> <subcommand>```
 
-// Crete an execution plan:
-terraform plan
+Initalize the directory:
+```terraform init```
 
-// Apply changes:
-terraform apply
+Crete an execution plan:
+```terraform plan```
 
-// Destroy the managed infraestructure:
-terraform destroy
+Apply changes:
+```terraform apply```
 
-// Now let's expand this commans upon
-//Plan, Deploy and Cleanup Commands
+Destroy the managed infraestructure:
+```terraform destroy```
 
-// Output a deployment plan, for example when you create a directory and want to put the plan in a file:
-terraform plan -out <plan_name>
+### Now let's expand this commans upon
 
-// Output a destroy plan:
-terraform plan -destroy
+Plan, Deploy and Cleanup Commands
 
-// Apply a specifc plan:
-terraform apply <plan_name>
+Output a deployment plan, for example when you create a directory and want to put the plan in a file:
+```terraform plan -out <plan_name>```
 
-// Only apply changes to a target resource
-terraform apply -target=<resource_name>
+Output a destroy plan:
+```terraform plan -destroy```
 
-// Pass a variable via the command line
-terraform apply -var my_variable=<variable>
+Apply a specifc plan:
+```terraform apply <plan_name>```
 
-// Get provider info used in configuration
-terraform providers
+Only apply changes to a target resource:
+```terraform apply -target=<resource_name>```
 
-// A terraform sytax consists of:
+Pass a variable via the command line
+```terraform apply -var my_variable=<variable>```
+
+Get provider info used in configuration
+```terraform providers```
+
+```
+A terraform sytax consists of:
 'Blocks' -> are containers for objects like resources
 'Arguments' -> assign a value to a plan name
 'Expressions' -> represent a value 
+
+```
